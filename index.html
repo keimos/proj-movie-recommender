@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head><title>AMC Movie Vibes</title></head>
+<body>
+  <h2>Select a Movie Vibe</h2>
+  <select id="vibe">
+    <option>Adrenaline Rush</option>
+    <option>Powerful Performances</option>
+    <option>Creepy but Smart</option>
+  </select>
+  <button onclick="getMovies()">Recommend</button>
+  <div id="results"></div>
+
+  <script>
+    async function getMovies() {
+      const vibe = document.getElementById("vibe").value;
+      const res = await fetch('/recommend', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({vibe})
+      });
+      const data = await res.json();
+      let html = `<h3>Recommendations for "${vibe}"</h3>`;
+      data.recommendations.forEach(movie => {
+        html += `<p><strong>${movie.title}</strong> (${movie.year}) <br />
+                  <a href="${movie.trailer}" target="_blank">Watch Trailer</a></p>`;
+      });
+      document.getElementById("results").innerHTML = html;
+    }
+  </script>
+</body>
+</html>
